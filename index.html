@@ -1,0 +1,394 @@
+# ESL Mediation Task: Team Payment & Ordering
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickEats: The Payment Negotiation Task</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .tab-active { border-bottom: 4px solid #f97316; color: #f97316; font-weight: 700; background-color: #fffaf2; }
+        .menu-card { transition: all 0.2s ease; border: 1px solid #e5e7eb; }
+        .menu-card:hover { transform: translateY(-3px); border-color: #f97316; box-shadow: 0 10px 15px -3px rgba(249, 115, 22, 0.1); }
+        .low-time { color: #ef4444; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+        .tip-btn.active { background-color: #10b981; color: white; border-color: #059669; transform: scale(1.05); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen pb-64">
+
+
+    <!-- App Header -->
+    <header class="bg-white shadow-md p-4 sticky top-0 z-30 border-b border-orange-100">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">💳</span>
+                <h1 class="text-xl font-bold text-orange-600 tracking-tight">QuickEats <span class="text-gray-400 font-normal italic text-sm">Team Task</span></h1>
+            </div>
+            <div class="flex gap-3 items-center">
+                <div id="timer-display" class="bg-gray-100 border px-3 py-1.5 rounded-lg font-mono font-bold text-gray-700 flex items-center gap-2">
+                    <span id="timer-icon">⏱️</span> 45:00
+                </div>
+                <div class="bg-green-100 text-green-700 px-3 py-1.5 rounded-lg font-bold border border-green-200">
+                    Budget: $60.00
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Role Selection (Information Gap) -->
+
+    <nav class="bg-white border-b sticky top-[73px] z-20 overflow-x-auto">
+        <div class="max-w-4xl mx-auto flex">
+            <button onclick="switchTab('A')" id="btn-A" class="flex-1 py-4 px-2 text-center text-xs md:text-sm tab-active">Learner A: Pizza & Card#</button>
+            <button onclick="switchTab('B')" id="btn-B" class="flex-1 py-4 px-2 text-center text-xs md:text-sm text-gray-500 hover:bg-gray-50">Learner B: Burgers & CVV</button>
+            <button onclick="switchTab('C')" id="btn-C" class="flex-1 py-4 px-2 text-center text-xs md:text-sm text-gray-500 hover:bg-gray-50">Learner C: Rules & Checkout</button>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-4 md:p-6">
+
+        <!-- Linguistic Scaffolding -->
+        <section class="mb-8 bg-blue-50 border border-blue-200 rounded-xl p-5 shadow-sm">
+            <h2 class="text-blue-800 font-bold mb-4 flex items-center gap-2 text-sm">
+                <span>💬</span> Language Toolbox (Helpful Phrases)
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-[13px]">
+                <div>
+                    <p class="font-bold text-blue-700 mb-2 border-b border-blue-100 uppercase text-[10px] tracking-widest">Choosing Food</p>
+                    <ul class="space-y-1 text-blue-900">
+
+                        <li>"I have a burger for $10.50."</li>
+                        <li>"Let's add the combo upgrade."</li>
+                        <li>"Do you want extra toppings?"</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-bold text-blue-700 mb-2 border-b border-blue-100 uppercase text-[10px] tracking-widest">Discussing Fees</p>
+                    <ul class="space-y-1 text-blue-900">
+                        <li>"The delivery fee is $3.99."</li>
+                        <li>"There is a 2.5% card fee."</li>
+                        <li>"The total is now $____."</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-bold text-blue-700 mb-2 border-b border-blue-100 uppercase text-[10px] tracking-widest">Negotiating Payment</p>
+                    <ul class="space-y-1 text-blue-900">
+                        <li>"What is your card number?"</li>
+                        <li>"My card limit is $50.00."</li>
+                        <li>"Who has enough money to pay?"</li>
+
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTENT: LEARNER A -->
+        <div id="tab-A" class="role-content space-y-6">
+            <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg">
+                <p class="font-bold text-orange-800">Learner A: Pizza Menu & Payment Part 1</p>
+                <p class="text-xs text-orange-700 mt-1 italic">Negotiation Goal: Describe your pizzas and share your Card Number if the group chooses your card.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-xl menu-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-gray-800">Margherita Pizza (V)</h3>
+                        <span class="font-bold text-orange-600">$12.50</span>
+                    </div>
+                    <button onclick="addToCart('Margherita', 12.50)" class="w-full bg-orange-500 text-white py-2 rounded-lg text-sm font-semibold">Add Pizza</button>
+
+                </div>
+                <div class="bg-white p-4 rounded-xl menu-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-gray-800">Meat Supreme</h3>
+                        <span class="font-bold text-orange-600">$15.00</span>
+                    </div>
+                    <button onclick="addToCart('Meat Supreme', 15.00)" class="w-full bg-orange-500 text-white py-2 rounded-lg text-sm font-semibold">Add Pizza</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="text-xs font-bold tracking-widest text-gray-400">YOUR PAYMENT CARD</span>
+                    <span class="text-xs font-bold text-orange-400">LIMIT: $50.00</span>
+                </div>
+                <p class="text-lg font-mono tracking-[0.2em] mb-4">4532 0199 8722 ****</p>
+                <div class="flex justify-between items-end">
+                    <span class="text-[10px] text-gray-400 uppercase">Card A</span>
+                    <span class="text-[10px] text-gray-400 uppercase">CVV: Ask Learner B</span>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT: LEARNER B -->
+        <div id="tab-B" class="role-content hidden space-y-6">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                <p class="font-bold text-blue-800">Learner B: Burger Menu & Payment Part 2</p>
+                <p class="text-xs text-blue-700 mt-1 italic">Negotiation Goal: Share the Combo Upgrade secret and provide the Expiry/CVV for the card the group picks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-xl menu-card">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-gray-800">Bacon Double Burger</h3>
+                        <span class="font-bold text-blue-600">$11.50</span>
+                    </div>
+                    <button onclick="addToCart('Bacon Burger', 11.50)" class="w-full bg-blue-500 text-white py-2 rounded-lg text-sm font-semibold">Add Burger</button>
+                </div>
+
+                <div class="bg-blue-100 p-4 rounded-xl border border-blue-200">
+                    <h4 class="font-bold text-sm text-blue-800 mb-1">Combo Upgrade (+$6.00)</h4>
+                    <p class="text-[10px] text-blue-700 mb-2 italic">Save money! Includes Fries + Large Soda.</p>
+                    <button onclick="addToCart('Combo Upgrade', 6.00)" class="w-full bg-white border border-blue-500 text-blue-600 py-2 rounded-lg text-xs font-bold">+ Add Combo</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 text-white p-5 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="flex justify-between items-start mb-6">
+                    <span class="text-xs font-bold tracking-widest text-gray-400">YOUR PAYMENT CARD</span>
+                    <span class="text-xs font-bold text-blue-400">LIMIT: $70.00</span>
+                </div>
+                <p class="text-lg font-mono tracking-[0.2em] mb-4">**** **** **** 1022</p>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <p class="text-[8px] text-gray-500">EXPIRY</p>
+                        <p class="text-sm font-mono">08/29</p>
+                    </div>
+                    <div>
+
+                        <p class="text-[8px] text-gray-500">CVV</p>
+                        <p class="text-sm font-mono">411</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT: LEARNER C -->
+        <div id="tab-C" class="role-content hidden space-y-6">
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg mb-4">
+                <p class="font-bold text-green-800">Learner C: The Group Manager</p>
+                <p class="text-xs text-green-700 mt-1 italic">Role: You have the Payment Form. You must ask A and B for their card data and limits.</p>
+            </div>
+
+            <!-- Order & Rules Summary -->
+            <div class="bg-white p-4 rounded-xl border mb-6 shadow-sm">
+                <h3 class="font-bold text-sm text-gray-800 mb-2 uppercase tracking-widest">Secret Group Rules:</h3>
+                <ul class="text-xs space-y-1 text-gray-600">
+                    <li>• Learner A must have a Meat dish.</li>
+
+                    <li>• Learner B is Vegetarian (needs a 'V' dish).</li>
+                    <li>• You must stay under the **$60.00** limit!</li>
+                </ul>
+            </div>
+
+            <!-- Complex Checkout Form -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg border-2 border-orange-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Checkout Form</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Cardholder Name (Your Tab Info)</label>
+                        <input type="text" id="pay-name" placeholder="Enter Your Full Name" class="w-full border rounded-lg p-3 text-sm outline-none focus:ring-2 focus:ring-orange-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Card Number (Ask Learner A)</label>
+                        <input type="text" id="pay-number" placeholder="0000 0000 0000 0000" class="w-full border rounded-lg p-3 text-sm font-mono">
+                    </div>
+
+
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Expiry (Ask Learner B)</label>
+                            <input type="text" id="pay-expiry" placeholder="MM/YY" class="w-full border rounded-lg p-3 text-sm font-mono">
+                        </div>
+                        <div class="flex-1">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">CVV (Ask Learner B)</label>
+                            <input type="text" id="pay-cvv" placeholder="000" class="w-full border rounded-lg p-3 text-sm font-mono">
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-2">Select Card Limit (Negotiate!)</label>
+                        <select id="card-limit-choice" class="w-full border rounded-lg p-3 text-sm bg-gray-50">
+                            <option value="50">Card A (Limit $50.00)</option>
+                            <option value="70" selected>Card B (Limit $70.00)</option>
+                            <option value="45">Card C (Limit $45.00)</option>
+                        </select>
+                    </div>
+
+
+                    <button onclick="processOrder()" class="w-full bg-orange-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-orange-700 active:scale-95 transition-all">Submit $60.00 Order</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Shared Footer (Cart & Math) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 shadow-[0_-5px_20px_rgba(0,0,0,0.1)] p-4 z-40">
+        <div class="max-w-4xl mx-auto">
+            <div id="cart-list" class="max-h-20 overflow-y-auto mb-3 space-y-1 border-b pb-2">
+                <p class="text-center text-xs italic text-gray-400">Negotiate the menu first...</p>
+            </div>
+
+            <div class="flex justify-between items-end">
+                <div class="text-[10px] text-gray-500 space-y-0.5 w-1/2">
+                    <div class="flex justify-between"><span>Subtotal:</span> <span id="ui-sub">$0.00</span></div>
+                    <div class="flex justify-between"><span>Svc Fee (10%):</span> <span id="ui-fee">$0.00</span></div>
+                    <div class="flex justify-between"><span>Delivery:</span> <span id="ui-del">$3.99</span></div>
+                    <div class="flex justify-between text-blue-600 font-bold"><span>CC Surcharge (2.5%):</span> <span id="ui-cc">$0.00</span></div>
+
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase">Total to Pay</p>
+                    <p id="ui-total" class="text-3xl font-bold text-gray-900 tracking-tighter">$3.99</p>
+                    <p id="ui-left" class="text-[11px] font-bold text-green-600">Budget: $60.00</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="modal-overlay" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-6 z-[100]">
+        <div class="bg-white p-8 rounded-3xl max-w-sm w-full text-center">
+            <div id="m-icon" class="text-6xl mb-4">🍕</div>
+            <h2 id="m-title" class="text-2xl font-bold mb-2">Success!</h2>
+            <p id="m-text" class="text-sm text-gray-600 mb-8"></p>
+            <button onclick="location.reload()" class="w-full bg-gray-900 text-white py-4 rounded-xl font-bold">Restart Task</button>
+        </div>
+    </div>
+
+
+    <script>
+        let cart = {};
+        let subtotal = 0;
+        let timeLeft = 2700; // 45 Minutes
+
+        window.onload = () => {
+            setInterval(updateTimer, 1000);
+            updateUI();
+        };
+
+        function updateTimer() {
+            timeLeft--;
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            const display = document.getElementById('timer-display');
+            display.innerHTML = `<span>⏱️</span> ${m}:${s < 10 ? '0' : ''}${s}`;
+            if (timeLeft < 300) display.classList.add('low-time');
+            if (timeLeft <= 0) {
+                alert("Time's up! The group order failed.");
+
+                location.reload();
+            }
+        }
+
+        function switchTab(id) {
+            document.querySelectorAll('.role-content').forEach(c => c.classList.add('hidden'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('tab-active', 'text-gray-500'));
+            document.getElementById('tab-' + id).classList.remove('hidden');
+            document.getElementById('btn-' + id).classList.add('tab-active');
+            document.querySelectorAll('nav button:not(.tab-active)').forEach(b => b.classList.add('text-gray-500'));
+        }
+
+        function addToCart(name, price) {
+            if (cart[name]) cart[name].qty++;
+            else cart[name] = { price, qty: 1 };
+            calculate();
+        }
+
+        function changeQty(name, delta) {
+
+            if (cart[name]) {
+                cart[name].qty += delta;
+                if (cart[name].qty <= 0) delete cart[name];
+                calculate();
+            }
+        }
+
+        function calculate() {
+            subtotal = 0;
+            for (let k in cart) { subtotal += cart[k].price * cart[k].qty; }
+            updateUI();
+        }
+
+        function updateUI() {
+            const list = document.getElementById('cart-list');
+            list.innerHTML = "";
+            if (subtotal === 0) list.innerHTML = `<p class="text-center text-xs italic text-gray-400">Negotiate the menu first...</p>`;
+            
+            for (let name in cart) {
+
+                list.innerHTML += `
+                    <div class="flex justify-between items-center text-[11px]">
+                        <span>${name} x${cart[name].qty}</span>
+                        <div class="flex items-center gap-2">
+                            <span>$${(cart[name].price * cart[name].qty).toFixed(2)}</span>
+                            <button onclick="changeQty('${name}', -1)" class="px-1 border bg-gray-50">-</button>
+                        </div>
+                    </div>`;
+            }
+
+            const fee = subtotal * 0.10;
+            const del = 3.99;
+            const preCC = subtotal + fee + del;
+            const cc = preCC * 0.025;
+            const total = preCC + cc;
+            const left = 60.00 - total;
+
+            document.getElementById('ui-sub').innerText = "$" + subtotal.toFixed(2);
+            document.getElementById('ui-fee').innerText = "$" + fee.toFixed(2);
+
+            document.getElementById('ui-del').innerText = "$" + del.toFixed(2);
+            document.getElementById('ui-cc').innerText = "$" + cc.toFixed(2);
+            document.getElementById('ui-total').innerText = "$" + total.toFixed(2);
+            document.getElementById('ui-left').innerText = "Budget: $60.00 (Left: $" + left.toFixed(2) + ")";
+
+            const totalEl = document.getElementById('ui-total');
+            if (total > 60) {
+                totalEl.classList.replace('text-gray-900', 'text-red-600');
+            } else {
+                totalEl.classList.replace('text-red-600', 'text-gray-900');
+            }
+        }
+
+        function processOrder() {
+            const total = parseFloat(document.getElementById('ui-total').innerText.replace('$',''));
+            const limit = parseFloat(document.getElementById('card-limit-choice').value);
+            const name = document.getElementById('pay-name').value;
+            const num = document.getElementById('pay-number').value;
+            const exp = document.getElementById('pay-expiry').value;
+
+            const cvv = document.getElementById('pay-cvv').value;
+
+            if (subtotal === 0) return alert("Your basket is empty!");
+            if (!name || !num || !exp || !cvv) return alert("Error: Payment information is incomplete. Ask your team members for the details!");
+            if (total > 60) return alert("Budget Error: You are over the $60.00 lesson limit!");
+            if (total > limit) return alert(`Payment Declined: This card has a limit of $${limit.toFixed(2)}. Your total is $${total.toFixed(2)}. Negotiate to use a different card!`);
+
+            // Check mediation rules
+            const hasMeat = cart['Meat Supreme'] || cart['Bacon Burger'] || cart['Beef Burger'];
+            const hasVeg = cart['Margherita'] || cart['Veggie Burger'];
+            if (!hasMeat) return alert("Negotiation Error: Learner A specifically asked for meat!");
+            if (!hasVeg) return alert("Negotiation Error: Learner B is a vegetarian!");
+
+            showModal('🎉', "Order Successful!", `Great mediation! You negotiated the menu, managed the fees, and used the correct card. Total: $${total.toFixed(2)}.`);
+        }
+
+        function showModal(icon, title, text) {
+            document.getElementById('m-icon').innerText = icon;
+            document.getElementById('m-title').innerText = title;
+
+            document.getElementById('m-text').innerText = text;
+            document.getElementById('modal-overlay').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
+
+
